@@ -33,17 +33,18 @@ export function Navbar() {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-0 z-50"
     >
-      {/* Gradient backdrop for logo visibility over hero images */}
+      {/* Gradient backdrop for logo visibility over hero */}
       <div className={cn(
-        'absolute inset-0 bg-gradient-to-b from-background/80 via-background/40 to-transparent pointer-events-none transition-opacity duration-500',
+        'absolute inset-0 bg-gradient-to-b from-background/90 via-background/50 to-transparent pointer-events-none transition-opacity duration-500 md:from-background/60 md:via-background/20',
         scrolled && 'opacity-0',
       )} />
+
       <div
         className={cn(
-          'relative z-10 mx-auto flex max-w-[1400px] items-center transition-all duration-500',
-          'px-3 py-2.5 md:px-8 md:py-4',
+          'relative z-10 mx-auto flex max-w-[1400px] items-center justify-between transition-all duration-500',
+          'px-4 py-3 md:px-8 md:py-4',
           scrolled &&
-            'mt-2 rounded-full border border-border/70 bg-card/80 px-4 py-2.5 backdrop-blur-xl md:mx-4 md:mt-3',
+            'mt-2 rounded-full border border-border/70 bg-card/80 px-5 py-2.5 backdrop-blur-xl md:mx-4 md:mt-3',
         )}
       >
         {/* LEFT: Hamburger (mobile) or Nav Links (desktop) */}
@@ -52,9 +53,9 @@ export function Navbar() {
             type="button"
             aria-label="Open menu"
             onClick={() => setOpen(true)}
-            className="flex items-center text-foreground/80 transition-colors hover:text-foreground md:hidden"
+            className="text-foreground transition-colors hover:text-foreground/80 md:hidden"
           >
-            <Menu className="size-5" />
+            <Menu className="size-6" />
           </button>
           <nav className="hidden items-center gap-8 md:flex">
             {links.slice(0, 3).map((l) => (
@@ -69,11 +70,11 @@ export function Navbar() {
           </nav>
         </div>
 
-        {/* CENTER: Logo — flex-1 centers it in remaining space */}
+        {/* CENTER: Logo */}
         <Link
           href="/"
           aria-label="Renaissance home"
-          className="flex-1 flex justify-center"
+          className="shrink-0 mx-auto"
         >
           <Image
             src="/renaissance-logo-dark.png"
@@ -81,12 +82,12 @@ export function Navbar() {
             width={170}
             height={66}
             priority
-            className="h-5 w-auto sm:h-7 md:h-8"
+            className="h-6 w-auto sm:h-7 md:h-8"
           />
         </Link>
 
         {/* RIGHT: Icons */}
-        <div className="flex items-center gap-2.5 sm:gap-5 shrink-0">
+        <div className="flex items-center gap-4 shrink-0">
           <nav className="hidden items-center gap-8 md:flex">
             {links.slice(3).map((l) => (
               <Link
@@ -102,21 +103,21 @@ export function Navbar() {
             aria-label="Search"
             className="hidden sm:block text-foreground/70 transition-colors hover:text-foreground"
           >
-            <Search className="size-[18px]" />
+            <Search className="size-5" />
           </button>
           <Link
             href="/account"
             aria-label="Account"
             className="hidden text-foreground/70 transition-colors hover:text-foreground sm:block"
           >
-            <User className="size-[18px]" />
+            <User className="size-5" />
           </Link>
           <Link
             href="/cart"
             aria-label="Cart"
-            className="relative text-foreground/70 transition-colors hover:text-foreground"
+            className="relative text-foreground transition-colors hover:text-foreground/80"
           >
-            <ShoppingBag className="size-[18px]" />
+            <ShoppingBag className="size-6 md:size-5" />
             <span className="absolute -right-2 -top-2 flex size-4 items-center justify-center rounded-full bg-foreground text-[10px] font-medium text-background">
               2
             </span>
