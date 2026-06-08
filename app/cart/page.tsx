@@ -105,7 +105,7 @@ export default function CartPage() {
                       </div>
                     </div>
                     <div className="flex flex-col items-end justify-between">
-                      <p className="text-sm font-medium text-foreground">${item.price * item.qty}</p>
+                      <p className="text-sm font-medium text-foreground">R{item.price * item.qty}</p>
                       <button
                         onClick={() => removeItem(item.id)}
                         className="text-muted-foreground hover:text-foreground transition-colors"
@@ -124,15 +124,15 @@ export default function CartPage() {
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between text-muted-foreground">
                   <span>Subtotal</span>
-                  <span className="text-foreground">${subtotal}</span>
+                  <span className="text-foreground">R{subtotal}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>Shipping</span>
-                  <span className="text-foreground">{shipping === 0 ? 'Free' : `$${shipping}`}</span>
+                  <span className="text-foreground">{shipping === 0 ? 'Free' : `R${shipping}`}</span>
                 </div>
                 <div className="border-t border-border pt-3 flex justify-between font-medium">
                   <span>Total</span>
-                  <span>${total}</span>
+                  <span>R{total}</span>
                 </div>
               </div>
               <button className="mt-6 w-full rounded-full bg-foreground py-4 text-xs uppercase tracking-[0.18em] text-background transition-colors hover:bg-foreground/90">

@@ -122,15 +122,15 @@ export default function ProductPage() {
               {product.salePrice ? (
                 <>
                   <span className="text-2xl text-foreground">
-                    ${product.salePrice}
+                    R{product.salePrice}
                   </span>
                   <span className="text-lg text-muted-foreground line-through">
-                    ${product.price}
+                    R{product.price}
                   </span>
                 </>
               ) : (
                 <span className="text-2xl text-foreground">
-                  ${product.price}
+                  R{product.price}
                 </span>
               )}
             </div>

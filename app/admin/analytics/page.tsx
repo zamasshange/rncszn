@@ -70,10 +70,10 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title="Total Revenue" value="$238,880" change="+23% from last month" trend="up" icon={DollarSign} />
+        <StatCard title="Total Revenue" value="R238,880" change="+23% from last month" trend="up" icon={DollarSign} />
         <StatCard title="Total Orders" value="1,682" change="+18% from last month" trend="up" icon={ShoppingCart} />
         <StatCard title="Total Customers" value="1,203" change="+15% from last month" trend="up" icon={Users} />
-        <StatCard title="Avg. Order Value" value="$142" change="+5% from last month" trend="up" icon={Package} />
+        <StatCard title="Avg. Order Value" value="R142" change="+5% from last month" trend="up" icon={Package} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -89,7 +89,7 @@ export default function AnalyticsPage() {
                     style={{ width: `${(data.revenue / 50000) * 100}%` }}
                   />
                 </div>
-                <span className="w-20 text-sm font-medium text-gray-900 text-right">${data.revenue.toLocaleString()}</span>
+                <span className="w-20 text-sm font-medium text-gray-900 text-right">R{data.revenue.toLocaleString()}</span>
               </div>
             ))}
           </div>
@@ -140,7 +140,7 @@ export default function AnalyticsPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">{product.sold}</td>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">${product.revenue.toLocaleString()}</td>
+                  <td className="px-6 py-4 text-sm font-medium text-gray-900">R{product.revenue.toLocaleString()}</td>
                   <td className="px-6 py-4">
                     <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div

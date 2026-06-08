@@ -35,16 +35,16 @@ export function Navbar() {
     >
       <div
         className={cn(
-          'relative mx-auto flex max-w-[1400px] items-center justify-between px-5 py-4 transition-all duration-500 md:px-8',
+          'relative mx-auto flex max-w-[1400px] items-center justify-between px-4 py-3 transition-all duration-500 md:px-8 md:py-4',
           scrolled &&
-            'mt-3 rounded-full border border-border/70 bg-card/70 px-6 py-3 backdrop-blur-xl md:mx-4',
+            'mt-2 rounded-full border border-border/70 bg-card/70 px-4 py-2.5 backdrop-blur-xl md:mx-4 md:mt-3',
         )}
       >
         <button
           type="button"
           aria-label="Open menu"
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 text-sm tracking-wide text-foreground/80 transition-colors hover:text-foreground md:hidden"
+          className="flex items-center gap-2 text-sm tracking-wide text-foreground/80 transition-colors hover:text-foreground md:hidden shrink-0"
         >
           <Menu className="size-5" />
         </button>
@@ -72,11 +72,11 @@ export function Navbar() {
             width={170}
             height={66}
             priority
-            className="h-6 w-auto sm:h-7 md:h-8"
+            className="h-5 w-auto sm:h-7 md:h-8"
           />
         </Link>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-3 sm:gap-5 shrink-0">
           <nav className="hidden items-center gap-8 md:flex">
             {links.slice(3).map((l) => (
               <Link

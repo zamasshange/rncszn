@@ -92,13 +92,13 @@ export function ProductCard({ product }: { product: Product }) {
           <div className="text-right text-sm">
             {product.salePrice ? (
               <span className="flex flex-col items-end">
-                <span className="text-foreground">${product.salePrice}</span>
+                <span className="text-foreground">R{product.salePrice}</span>
                 <span className="text-xs text-muted-foreground line-through">
-                  ${product.price}
+                  R{product.price}
                 </span>
               </span>
             ) : (
-              <span className="text-foreground">${product.price}</span>
+              <span className="text-foreground">R{product.price}</span>
             )}
           </div>
         </div>
