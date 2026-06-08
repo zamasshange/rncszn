@@ -13,7 +13,7 @@ const items = [
 
 export function Marquee() {
   return (
-    <div className="border-y border-border bg-foreground py-4 text-background">
+    <div className="border-y border-border bg-foreground py-4 text-background overflow-hidden">
       <motion.div
         className="flex whitespace-nowrap"
         animate={{ x: ['0%', '-50%'] }}

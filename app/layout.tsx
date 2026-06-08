@@ -1,5 +1,5 @@
 import { Analytics } from '@vercel/analytics/next'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Geist } from 'next/font/google'
 import { Fraunces } from 'next/font/google'
 import './globals.css'
@@ -12,6 +12,14 @@ const fraunces = Fraunces({
   subsets: ['latin'],
   display: 'swap',
 })
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#f8f8f8',
+}
 
 export const metadata: Metadata = {
   title: 'RENAISSANCE — The Future of Y2K Fashion',
