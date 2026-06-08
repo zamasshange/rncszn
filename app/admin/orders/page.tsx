@@ -6,9 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Order, getOrders, updateOrder, OrderStatus } from '@/lib/local-db';
 import { cn } from '@/lib/utils';
 
-function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+function Card({ children, className = '', ...props }: { children: React.ReactNode; className?: string; onClick?: () => void }) {
   return (
-    <div className={cn('bg-white rounded-xl border border-gray-200 p-6', className)}>
+    <div className={cn('bg-white rounded-xl border border-gray-200 p-6', className)} onClick={props.onClick}>
       {children}
     </div>
   );
@@ -64,7 +64,7 @@ export default function OrdersPage() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   useEffect(() => {
-    setOrders(getOrders());
+    getOrders().then(setOrders);
   }, []);
 
   const filteredOrders = orders.filter(order => {
@@ -83,9 +83,9 @@ export default function OrdersPage() {
     }).format(amount);
   };
 
-  const handleStatusChange = (orderId: string, newStatus: OrderStatus) => {
-    updateOrder(orderId, { status: newStatus });
-    setOrders(getOrders());
+  const handleStatusChange = async (orderId: string, newStatus: OrderStatus) => {
+    await updateOrder(orderId, { status: newStatus });
+    setOrders(await getOrders());
     if (selectedOrder && selectedOrder.id === orderId) {
       setSelectedOrder({ ...selectedOrder, status: newStatus });
     }

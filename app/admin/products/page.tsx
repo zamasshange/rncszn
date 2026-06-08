@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { Package, Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye, Copy, Archive, X, Save, Upload, Image as ImageIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Package, Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye, Copy, Archive, X, Save, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Product, ProductStatus, getProducts, createProduct, updateProduct, deleteProduct, duplicateProduct } from '@/lib/local-db';
 import { cn } from '@/lib/utils';
@@ -47,7 +47,6 @@ function Modal({ isOpen, onClose, title, children }: { isOpen: boolean; onClose:
 }
 
 function ProductForm({ product, onSave, onCancel }: { product?: Product | null; onSave: (data: Partial<Product>) => void; onCancel: () => void }) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageUrl, setImageUrl] = useState('');
   const [formData, setFormData] = useState<{
     name: string;
@@ -111,22 +110,6 @@ function ProductForm({ product, onSave, onCancel }: { product?: Product | null; 
     });
   };
 
-  const handleFiles = (files: FileList | null) => {
-    if (!files) return;
-    Array.from(files).forEach(file => {
-      if (!file.type.startsWith('image/')) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const dataUrl = e.target?.result as string;
-        setFormData(prev => ({
-          ...prev,
-          images: [...prev.images, dataUrl],
-        }));
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
   const handleAddImageUrl = () => {
     if (imageUrl.trim()) {
       setFormData(prev => ({
@@ -135,15 +118,6 @@ function ProductForm({ product, onSave, onCancel }: { product?: Product | null; 
       }));
       setImageUrl('');
     }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    handleFiles(e.dataTransfer.files);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -316,47 +290,26 @@ function ProductForm({ product, onSave, onCancel }: { product?: Product | null; 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
 
-        {/* Hidden file input */}
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          className="hidden"
-          onChange={(e) => handleFiles(e.target.files)}
-        />
-
-        {/* Upload drop zone */}
-        <div
-          onClick={() => fileInputRef.current?.click()}
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors cursor-pointer"
-        >
-          <Upload className="size-8 text-gray-400 mx-auto mb-2" />
-          <p className="text-sm text-gray-600 font-medium">Click to upload or drag and drop</p>
-          <p className="text-xs text-gray-400 mt-1">PNG, JPG, WebP up to 5MB each</p>
-        </div>
-
         {/* Add image by URL */}
-        <div className="mt-3 flex gap-2">
+        <div className="flex gap-2">
           <input
             type="text"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
-            placeholder="Or paste an image URL..."
-            className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            placeholder="Paste an image URL (e.g. https://...)"
+            className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddImageUrl(); } }}
           />
           <button
             type="button"
             onClick={handleAddImageUrl}
             disabled={!imageUrl.trim()}
-            className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+            className="px-5 py-2.5 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Add URL
+            Add Image
           </button>
         </div>
+        <p className="text-xs text-gray-500 mt-1.5">Paste a direct link to an image (PNG, JPG, WebP). The first image becomes the thumbnail.</p>
 
         {/* Image previews */}
         {formData.images.length > 0 && (
@@ -409,7 +362,7 @@ export default function ProductsPage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   useEffect(() => {
-    setProducts(getProducts());
+    getProducts().then(setProducts);
   }, []);
 
   const filteredProducts = products.filter(product => {
@@ -430,32 +383,32 @@ export default function ProductsPage() {
     setIsModalOpen(true);
   };
 
-  const handleSave = (data: Partial<Product>) => {
+  const handleSave = async (data: Partial<Product>) => {
     if (editingProduct) {
-      updateProduct(editingProduct.id, data);
+      await updateProduct(editingProduct.id, data);
     } else {
-      createProduct(data as any);
+      await createProduct(data as any);
     }
-    setProducts(getProducts());
+    setProducts(await getProducts());
     setIsModalOpen(false);
     setEditingProduct(null);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this product?')) {
-      deleteProduct(id);
-      setProducts(getProducts());
+      await deleteProduct(id);
+      setProducts(await getProducts());
     }
   };
 
-  const handleDuplicate = (id: string) => {
-    duplicateProduct(id);
-    setProducts(getProducts());
+  const handleDuplicate = async (id: string) => {
+    await duplicateProduct(id);
+    setProducts(await getProducts());
   };
 
-  const handleStatusChange = (id: string, status: string) => {
-    updateProduct(id, { status: status as any });
-    setProducts(getProducts());
+  const handleStatusChange = async (id: string, status: string) => {
+    await updateProduct(id, { status: status as any });
+    setProducts(await getProducts());
   };
 
   const categories = [...new Set(products.map(p => p.category).filter(Boolean))];

@@ -15,11 +15,12 @@ export type Product = {
   inStock: boolean
 }
 
+type DbProduct = Awaited<ReturnType<typeof getPublishedProducts>>[number]
+
 /**
  * Map a database Product to the site Product type.
- * Reads from localStorage so products created in the admin appear on the site.
  */
-function mapToSiteProduct(p: ReturnType<typeof getPublishedProducts>[number]): Product {
+function mapToSiteProduct(p: DbProduct): Product {
   const badgeMap: Record<string, string> = {
     new: 'New',
     sale: 'Sale',
@@ -48,11 +49,11 @@ function mapToSiteProduct(p: ReturnType<typeof getPublishedProducts>[number]): P
 
 /**
  * Get all published products for the storefront.
- * Sources from localStorage via local-db so admin-created products appear here.
+ * Returns a Promise since it may fetch from Supabase.
  */
-export function getSiteProducts(): Product[] {
+export async function getSiteProducts(): Promise<Product[]> {
   try {
-    const dbProducts = getPublishedProducts()
+    const dbProducts = await getPublishedProducts()
     return dbProducts.map(mapToSiteProduct)
   } catch {
     return []
@@ -62,9 +63,9 @@ export function getSiteProducts(): Product[] {
 /**
  * Get a single product by slug for the product detail page.
  */
-export function getSiteProductBySlug(slug: string): Product | undefined {
+export async function getSiteProductBySlug(slug: string): Promise<Product | undefined> {
   try {
-    const dbProduct = dbGetProductBySlug(slug)
+    const dbProduct = await dbGetProductBySlug(slug)
     if (!dbProduct || dbProduct.status !== 'published') return undefined
     return mapToSiteProduct(dbProduct)
   } catch {

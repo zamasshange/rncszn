@@ -11,7 +11,7 @@ export function FeaturedGrid() {
   const [products, setProducts] = useState<Product[]>([])
 
   useEffect(() => {
-    setProducts(getSiteProducts())
+    getSiteProducts().then(setProducts)
   }, [])
 
   return (

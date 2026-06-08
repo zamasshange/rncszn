@@ -24,13 +24,16 @@ export default function ProductPage() {
   const [wishlisted, setWishlisted] = useState(false)
 
   useEffect(() => {
-    const found = getSiteProductBySlug(slug)
-    if (found) {
-      setProduct(found)
-      setSize(found.sizes[1] ?? found.sizes[0])
+    async function load() {
+      const found = await getSiteProductBySlug(slug)
+      if (found) {
+        setProduct(found)
+        setSize(found.sizes[1] ?? found.sizes[0])
+      }
+      const all = await getSiteProducts()
+      setRelated(all.filter((p) => p.id !== found?.id).slice(0, 4))
     }
-    const all = getSiteProducts()
-    setRelated(all.filter((p) => p.id !== found?.id).slice(0, 4))
+    load()
   }, [slug])
 
   if (!product) {

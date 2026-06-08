@@ -22,7 +22,7 @@ export default function ShopPage() {
   const [sort, setSort] = useState<(typeof sorts)[number]['key']>('new')
 
   useEffect(() => {
-    setAllProducts(getSiteProducts())
+    getSiteProducts().then(setAllProducts)
   }, [])
 
   const filtered = useMemo(() => {

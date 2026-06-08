@@ -200,7 +200,7 @@ export default function DiscountsPage() {
   const [editingDiscount, setEditingDiscount] = useState<Discount | null>(null);
 
   useEffect(() => {
-    setDiscounts(getDiscounts());
+    getDiscounts().then(setDiscounts);
   }, []);
 
   const filteredDiscounts = discounts.filter(discount =>
@@ -218,27 +218,27 @@ export default function DiscountsPage() {
     setIsModalOpen(true);
   };
 
-  const handleSave = (data: Partial<Discount>) => {
+  const handleSave = async (data: Partial<Discount>) => {
     if (editingDiscount) {
-      updateDiscount(editingDiscount.id, data);
+      await updateDiscount(editingDiscount.id, data);
     } else {
-      createDiscount(data as any);
+      await createDiscount(data as any);
     }
-    setDiscounts(getDiscounts());
+    setDiscounts(await getDiscounts());
     setIsModalOpen(false);
     setEditingDiscount(null);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this discount?')) {
-      deleteDiscount(id);
-      setDiscounts(getDiscounts());
+      await deleteDiscount(id);
+      setDiscounts(await getDiscounts());
     }
   };
 
-  const handleToggleActive = (id: string, currentActive: boolean) => {
-    updateDiscount(id, { active: !currentActive });
-    setDiscounts(getDiscounts());
+  const handleToggleActive = async (id: string, currentActive: boolean) => {
+    await updateDiscount(id, { active: !currentActive });
+    setDiscounts(await getDiscounts());
   };
 
   const formatValue = (discount: Discount) => {

@@ -53,7 +53,7 @@ export default function CustomersPage() {
   const [customerOrders, setCustomerOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    setCustomers(getCustomers());
+    getCustomers().then(setCustomers);
   }, []);
 
   const filteredCustomers = customers.filter(customer =>
@@ -70,9 +70,10 @@ export default function CustomersPage() {
     }).format(amount);
   };
 
-  const handleViewCustomer = (customer: Customer) => {
+  const handleViewCustomer = async (customer: Customer) => {
     setSelectedCustomer(customer);
-    setCustomerOrders(getOrdersByCustomer(customer.id));
+    const orders = await getOrdersByCustomer(customer.id);
+    setCustomerOrders(orders);
   };
 
   return (

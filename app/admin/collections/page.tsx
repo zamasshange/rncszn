@@ -163,7 +163,7 @@ export default function CollectionsPage() {
   const [editingCollection, setEditingCollection] = useState<Collection | null>(null);
 
   useEffect(() => {
-    setCollections(getCollections());
+    getCollections().then(setCollections);
   }, []);
 
   const filteredCollections = collections.filter(collection =>
@@ -181,27 +181,27 @@ export default function CollectionsPage() {
     setIsModalOpen(true);
   };
 
-  const handleSave = (data: Partial<Collection>) => {
+  const handleSave = async (data: Partial<Collection>) => {
     if (editingCollection) {
-      updateCollection(editingCollection.id, data);
+      await updateCollection(editingCollection.id, data);
     } else {
-      createCollection(data as any);
+      await createCollection(data as any);
     }
-    setCollections(getCollections());
+    setCollections(await getCollections());
     setIsModalOpen(false);
     setEditingCollection(null);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this collection?')) {
-      deleteCollection(id);
-      setCollections(getCollections());
+      await deleteCollection(id);
+      setCollections(await getCollections());
     }
   };
 
-  const handleToggleFeatured = (id: string, featured: boolean) => {
-    updateCollection(id, { featured: !featured });
-    setCollections(getCollections());
+  const handleToggleFeatured = async (id: string, featured: boolean) => {
+    await updateCollection(id, { featured: !featured });
+    setCollections(await getCollections());
   };
 
   return (
