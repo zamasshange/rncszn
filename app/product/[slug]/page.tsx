@@ -1,0 +1,220 @@
+'use client'
+
+import { useState } from 'react'
+import { useParams } from 'next/navigation'
+import Image from 'next/image'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
+import { Heart, Minus, Plus, Truck, RotateCcw, ShieldCheck } from 'lucide-react'
+import { Navbar } from '@/components/navbar'
+import { Footer } from '@/components/sections/footer'
+import { ProductCard } from '@/components/product-card'
+import { products } from '@/lib/products'
+import { Magnetic } from '@/components/magnetic'
+
+export default function ProductPage() {
+  const params = useParams()
+  const slug = params?.slug as string
+  const product = products.find((p) => p.slug === slug) ?? products[0]
+  const related = products.filter((p) => p.id !== product.id).slice(0, 4)
+
+  const gallery = [product.image, '/editorial-2.png', '/brand-story.png']
+  const [active, setActive] = useState(0)
+  const [size, setSize] = useState(product.sizes[1] ?? product.sizes[0])
+  const [qty, setQty] = useState(1)
+  const [wishlisted, setWishlisted] = useState(false)
+
+  return (
+    <main className="bg-background">
+      <Navbar />
+
+      <section className="mx-auto max-w-[1400px] px-5 pt-28 md:px-8 md:pt-36">
+        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          <Link href="/" className="hover:text-foreground">
+            Home
+          </Link>
+          <span>/</span>
+          <Link href="/shop" className="hover:text-foreground">
+            Shop
+          </Link>
+          <span>/</span>
+          <span className="text-foreground">{product.name}</span>
+        </div>
+
+        <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
+          {/* Gallery */}
+          <div className="flex flex-col-reverse gap-4 md:flex-row">
+            <div className="flex gap-3 md:flex-col">
+              {gallery.map((src, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActive(i)}
+                  className={`relative aspect-square w-16 overflow-hidden rounded-lg border transition-colors md:w-20 ${
+                    active === i ? 'border-foreground' : 'border-border'
+                  }`}
+                  aria-label={`View image ${i + 1}`}
+                >
+                  <Image
+                    src={src || '/placeholder.svg'}
+                    alt=""
+                    fill
+                    className="object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, scale: 1.02 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="relative aspect-[4/5] flex-1 overflow-hidden rounded-2xl bg-muted"
+            >
+              <Image
+                src={gallery[active] || '/placeholder.svg'}
+                alt={product.name}
+                fill
+                priority
+                className="object-cover"
+              />
+            </motion.div>
+          </div>
+
+          {/* Details */}
+          <div className="lg:py-4">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+              {product.collection}
+            </p>
+            <h1 className="mt-3 text-balance font-serif text-4xl font-light leading-[1.05] text-foreground md:text-5xl">
+              {product.name}
+            </h1>
+
+            <div className="mt-5 flex items-center gap-3">
+              {product.salePrice ? (
+                <>
+                  <span className="text-2xl text-foreground">
+                    ${product.salePrice}
+                  </span>
+                  <span className="text-lg text-muted-foreground line-through">
+                    ${product.price}
+                  </span>
+                </>
+              ) : (
+                <span className="text-2xl text-foreground">
+                  ${product.price}
+                </span>
+              )}
+            </div>
+
+            <p className="mt-6 max-w-md text-pretty leading-relaxed text-muted-foreground">
+              A signature Renaissance piece — hand-finished in chrome-treated
+              technical fabric with a sculpted silhouette. Designed in-house and
+              produced in limited quantities.
+            </p>
+
+            {/* Size */}
+            <div className="mt-8">
+              <div className="flex items-center justify-between">
+                <span className="text-xs uppercase tracking-[0.18em] text-foreground">
+                  Size
+                </span>
+                <button className="text-xs uppercase tracking-[0.14em] text-muted-foreground underline underline-offset-4">
+                  Size guide
+                </button>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {product.sizes.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSize(s)}
+                    className={`min-w-12 rounded-lg border px-4 py-2.5 text-sm transition-colors ${
+                      size === s
+                        ? 'border-foreground bg-foreground text-background'
+                        : 'border-border text-foreground hover:border-foreground/50'
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Qty + actions */}
+            <div className="mt-8 flex items-center gap-3">
+              <div className="flex items-center rounded-full border border-border">
+                <button
+                  onClick={() => setQty((q) => Math.max(1, q - 1))}
+                  className="flex size-11 items-center justify-center text-foreground"
+                  aria-label="Decrease quantity"
+                >
+                  <Minus className="size-4" />
+                </button>
+                <span className="w-8 text-center text-sm">{qty}</span>
+                <button
+                  onClick={() => setQty((q) => q + 1)}
+                  className="flex size-11 items-center justify-center text-foreground"
+                  aria-label="Increase quantity"
+                >
+                  <Plus className="size-4" />
+                </button>
+              </div>
+              <button
+                onClick={() => setWishlisted((w) => !w)}
+                className="flex size-11 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-foreground/50"
+                aria-label="Add to wishlist"
+              >
+                <Heart
+                  className={`size-4 ${wishlisted ? 'fill-foreground' : ''}`}
+                />
+              </button>
+            </div>
+
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+              <Magnetic className="flex-1" strength={0.2}>
+                <button
+                  disabled={!product.inStock}
+                  className="w-full rounded-full bg-foreground py-4 text-xs uppercase tracking-[0.18em] text-background transition-colors hover:bg-foreground/90 disabled:opacity-40"
+                >
+                  {product.inStock ? 'Add to cart' : 'Sold out'}
+                </button>
+              </Magnetic>
+              <button className="flex-1 rounded-full border border-foreground py-4 text-xs uppercase tracking-[0.18em] text-foreground transition-colors hover:bg-foreground hover:text-background">
+                Buy now
+              </button>
+            </div>
+
+            {/* Reassurance */}
+            <div className="mt-10 grid gap-4 border-t border-border pt-8 sm:grid-cols-3">
+              {[
+                { icon: Truck, label: 'Free worldwide shipping' },
+                { icon: RotateCcw, label: '30-day returns' },
+                { icon: ShieldCheck, label: 'Authenticity guaranteed' },
+              ].map((item) => (
+                <div key={item.label} className="flex items-center gap-2.5">
+                  <item.icon className="size-4 shrink-0 text-foreground" />
+                  <span className="text-xs leading-tight text-muted-foreground">
+                    {item.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Related */}
+      <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
+        <h2 className="font-serif text-3xl font-light text-foreground md:text-4xl">
+          You may also like
+        </h2>
+        <div className="mt-10 grid grid-cols-2 gap-5 md:gap-7 lg:grid-cols-4">
+          {related.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      </section>
+
+      <Footer />
+    </main>
+  )
+}
