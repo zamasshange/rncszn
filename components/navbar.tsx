@@ -33,6 +33,11 @@ export function Navbar() {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-0 z-50"
     >
+      {/* Gradient backdrop to ensure logo visibility over hero images */}
+      <div className={cn(
+        'absolute inset-0 bg-gradient-to-b from-background/70 via-background/30 to-transparent pointer-events-none transition-opacity duration-500',
+        scrolled && 'opacity-0',
+      )} />
       <div
         className={cn(
           'relative mx-auto flex max-w-[1400px] items-center justify-between px-4 py-3 transition-all duration-500 md:px-8 md:py-4',
