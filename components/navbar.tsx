@@ -33,43 +33,47 @@ export function Navbar() {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-0 z-50"
     >
-      {/* Gradient backdrop to ensure logo visibility over hero images */}
+      {/* Gradient backdrop for logo visibility over hero images */}
       <div className={cn(
-        'absolute inset-0 bg-gradient-to-b from-background/70 via-background/30 to-transparent pointer-events-none transition-opacity duration-500',
+        'absolute inset-0 bg-gradient-to-b from-background/80 via-background/40 to-transparent pointer-events-none transition-opacity duration-500',
         scrolled && 'opacity-0',
       )} />
       <div
         className={cn(
-          'relative mx-auto flex max-w-[1400px] items-center justify-between px-4 py-3 transition-all duration-500 md:px-8 md:py-4',
+          'relative z-10 mx-auto flex max-w-[1400px] items-center transition-all duration-500',
+          'px-3 py-2.5 md:px-8 md:py-4',
           scrolled &&
-            'mt-2 rounded-full border border-border/70 bg-card/70 px-4 py-2.5 backdrop-blur-xl md:mx-4 md:mt-3',
+            'mt-2 rounded-full border border-border/70 bg-card/80 px-4 py-2.5 backdrop-blur-xl md:mx-4 md:mt-3',
         )}
       >
-        <button
-          type="button"
-          aria-label="Open menu"
-          onClick={() => setOpen(true)}
-          className="flex items-center gap-2 text-sm tracking-wide text-foreground/80 transition-colors hover:text-foreground md:hidden shrink-0"
-        >
-          <Menu className="size-5" />
-        </button>
+        {/* LEFT: Hamburger (mobile) or Nav Links (desktop) */}
+        <div className="shrink-0">
+          <button
+            type="button"
+            aria-label="Open menu"
+            onClick={() => setOpen(true)}
+            className="flex items-center text-foreground/80 transition-colors hover:text-foreground md:hidden"
+          >
+            <Menu className="size-5" />
+          </button>
+          <nav className="hidden items-center gap-8 md:flex">
+            {links.slice(0, 3).map((l) => (
+              <Link
+                key={l.label}
+                href={l.href}
+                className="text-xs uppercase tracking-[0.18em] text-foreground/70 transition-colors hover:text-foreground"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
 
-        <nav className="hidden items-center gap-8 md:flex">
-          {links.slice(0, 3).map((l) => (
-            <Link
-              key={l.label}
-              href={l.href}
-              className="text-xs uppercase tracking-[0.18em] text-foreground/70 transition-colors hover:text-foreground"
-            >
-              {l.label}
-            </Link>
-          ))}
-        </nav>
-
+        {/* CENTER: Logo — flex-1 centers it in remaining space */}
         <Link
           href="/"
           aria-label="Renaissance home"
-          className="absolute left-1/2 z-10 -translate-x-1/2"
+          className="flex-1 flex justify-center"
         >
           <Image
             src="/renaissance-logo-dark.png"
@@ -81,7 +85,8 @@ export function Navbar() {
           />
         </Link>
 
-        <div className="flex items-center gap-3 sm:gap-5 shrink-0">
+        {/* RIGHT: Icons */}
+        <div className="flex items-center gap-2.5 sm:gap-5 shrink-0">
           <nav className="hidden items-center gap-8 md:flex">
             {links.slice(3).map((l) => (
               <Link
@@ -95,7 +100,7 @@ export function Navbar() {
           </nav>
           <button
             aria-label="Search"
-            className="text-foreground/70 transition-colors hover:text-foreground"
+            className="hidden sm:block text-foreground/70 transition-colors hover:text-foreground"
           >
             <Search className="size-[18px]" />
           </button>
