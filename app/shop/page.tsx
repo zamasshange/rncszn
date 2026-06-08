@@ -1,15 +1,15 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { SlidersHorizontal } from 'lucide-react'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/sections/footer'
 import { ProductCard } from '@/components/product-card'
-import { products } from '@/lib/products'
+import { getSiteProducts, type Product } from '@/lib/products'
 
-const categories = ['All', 'Outerwear', 'Tops', 'Bottoms', 'Accessories']
+const categories = ['All', 'Outerwear', 'Tops', 'Bottoms', 'Accessories', 'Dresses']
 const sorts = [
   { key: 'new', label: 'Newest' },
   { key: 'low', label: 'Price: Low to High' },
@@ -17,11 +17,16 @@ const sorts = [
 ] as const
 
 export default function ShopPage() {
+  const [allProducts, setAllProducts] = useState<Product[]>([])
   const [category, setCategory] = useState('All')
   const [sort, setSort] = useState<(typeof sorts)[number]['key']>('new')
 
+  useEffect(() => {
+    setAllProducts(getSiteProducts())
+  }, [])
+
   const filtered = useMemo(() => {
-    let list = products.filter(
+    let list = allProducts.filter(
       (p) => category === 'All' || p.category === category,
     )
     if (sort === 'low')
@@ -33,7 +38,7 @@ export default function ShopPage() {
         (a, b) => (b.salePrice ?? b.price) - (a.salePrice ?? a.price),
       )
     return list
-  }, [category, sort])
+  }, [allProducts, category, sort])
 
   return (
     <main className="bg-background">
@@ -98,6 +103,11 @@ export default function ShopPage() {
           {filtered.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
+          {filtered.length === 0 && (
+            <div className="col-span-full py-24 text-center">
+              <p className="text-sm text-muted-foreground">No products found. Add some from the admin panel!</p>
+            </div>
+          )}
         </motion.div>
       </section>
 

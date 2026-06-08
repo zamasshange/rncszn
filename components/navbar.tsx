@@ -35,7 +35,7 @@ export function Navbar() {
     >
       <div
         className={cn(
-          'mx-auto flex max-w-[1400px] items-center justify-between px-5 py-4 transition-all duration-500 md:px-8',
+          'relative mx-auto flex max-w-[1400px] items-center justify-between px-5 py-4 transition-all duration-500 md:px-8',
           scrolled &&
             'mt-3 rounded-full border border-border/70 bg-card/70 px-6 py-3 backdrop-blur-xl md:mx-4',
         )}
@@ -64,7 +64,7 @@ export function Navbar() {
         <Link
           href="/"
           aria-label="Renaissance home"
-          className="absolute left-1/2 -translate-x-1/2"
+          className="absolute left-1/2 z-10 -translate-x-1/2"
         >
           <Image
             src="/renaissance-logo-dark.png"
@@ -72,7 +72,7 @@ export function Navbar() {
             width={170}
             height={66}
             priority
-            className="h-7 w-auto md:h-8"
+            className="h-6 w-auto sm:h-7 md:h-8"
           />
         </Link>
 

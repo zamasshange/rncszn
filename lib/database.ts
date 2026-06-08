@@ -47,7 +47,7 @@ export type Collection = {
   updatedAt: string;
 };
 
-export type OrderStatus = 'pending' | 'paid' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+export type OrderStatus = 'pending' | 'paid' | 'processing' | 'shipped' | 'delivered' | 'completed' | 'cancelled';
 
 export type Order = {
   id: string;

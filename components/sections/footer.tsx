@@ -57,7 +57,7 @@ export function Footer() {
         </div>
 
         <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-border pt-8 text-xs text-muted-foreground md:flex-row md:items-center">
-          <p>© {new Date().getFullYear()} Renaissance. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Renaissance. All rights reserved. Developed by BDL Corp.</p>
           <div className="flex gap-6">
             <Link href="#" className="transition-colors hover:text-foreground">
               Privacy

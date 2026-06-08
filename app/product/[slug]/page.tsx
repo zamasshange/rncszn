@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -9,20 +9,46 @@ import { Heart, Minus, Plus, Truck, RotateCcw, ShieldCheck } from 'lucide-react'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/sections/footer'
 import { ProductCard } from '@/components/product-card'
-import { products } from '@/lib/products'
+import { getSiteProductBySlug, getSiteProducts, type Product } from '@/lib/products'
 import { Magnetic } from '@/components/magnetic'
 
 export default function ProductPage() {
   const params = useParams()
   const slug = params?.slug as string
-  const product = products.find((p) => p.slug === slug) ?? products[0]
-  const related = products.filter((p) => p.id !== product.id).slice(0, 4)
 
-  const gallery = [product.image, '/editorial-2.png', '/brand-story.png']
+  const [product, setProduct] = useState<Product | null>(null)
+  const [related, setRelated] = useState<Product[]>([])
   const [active, setActive] = useState(0)
-  const [size, setSize] = useState(product.sizes[1] ?? product.sizes[0])
+  const [size, setSize] = useState('M')
   const [qty, setQty] = useState(1)
   const [wishlisted, setWishlisted] = useState(false)
+
+  useEffect(() => {
+    const found = getSiteProductBySlug(slug)
+    if (found) {
+      setProduct(found)
+      setSize(found.sizes[1] ?? found.sizes[0])
+    }
+    const all = getSiteProducts()
+    setRelated(all.filter((p) => p.id !== found?.id).slice(0, 4))
+  }, [slug])
+
+  if (!product) {
+    return (
+      <main className="bg-background">
+        <Navbar />
+        <section className="mx-auto flex max-w-[1400px] flex-col items-center justify-center px-5 pt-40 pb-32 md:px-8">
+          <p className="text-sm text-muted-foreground">Product not found.</p>
+          <Link href="/shop" className="mt-4 text-sm underline hover:no-underline">
+            Back to shop
+          </Link>
+        </section>
+        <Footer />
+      </main>
+    )
+  }
+
+  const gallery = [product.image, '/editorial-2.png', '/brand-story.png']
 
   return (
     <main className="bg-background">
@@ -203,16 +229,18 @@ export default function ProductPage() {
       </section>
 
       {/* Related */}
-      <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
-        <h2 className="font-serif text-3xl font-light text-foreground md:text-4xl">
-          You may also like
-        </h2>
-        <div className="mt-10 grid grid-cols-2 gap-5 md:gap-7 lg:grid-cols-4">
-          {related.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
-        </div>
-      </section>
+      {related.length > 0 && (
+        <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
+          <h2 className="font-serif text-3xl font-light text-foreground md:text-4xl">
+            You may also like
+          </h2>
+          <div className="mt-10 grid grid-cols-2 gap-5 md:gap-7 lg:grid-cols-4">
+            {related.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <Footer />
     </main>

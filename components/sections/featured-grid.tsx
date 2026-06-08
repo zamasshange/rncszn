@@ -1,10 +1,19 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
-import { products } from '@/lib/products'
+import { getSiteProducts, type Product } from '@/lib/products'
 import { ProductCard } from '@/components/product-card'
 import { Reveal } from '@/components/reveal'
 
 export function FeaturedGrid() {
+  const [products, setProducts] = useState<Product[]>([])
+
+  useEffect(() => {
+    setProducts(getSiteProducts())
+  }, [])
+
   return (
     <section className="mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
@@ -28,11 +37,16 @@ export function FeaturedGrid() {
       </div>
 
       <div className="mt-12 grid grid-cols-2 gap-5 md:gap-7 lg:grid-cols-4">
-        {products.map((product, i) => (
+        {products.slice(0, 8).map((product, i) => (
           <Reveal key={product.id} delay={i * 0.08}>
             <ProductCard product={product} />
           </Reveal>
         ))}
+        {products.length === 0 && (
+          <div className="col-span-full py-16 text-center">
+            <p className="text-sm text-muted-foreground">No products yet. Add some from the admin panel!</p>
+          </div>
+        )}
       </div>
     </section>
   )

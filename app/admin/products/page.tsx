@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Package, Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye, Copy, Archive, X, Save, Upload, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Product, getProducts, createProduct, updateProduct, deleteProduct, duplicateProduct } from '@/lib/local-db';
+import { Product, ProductStatus, getProducts, createProduct, updateProduct, deleteProduct, duplicateProduct } from '@/lib/local-db';
 import { cn } from '@/lib/utils';
 
 function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
@@ -47,7 +47,23 @@ function Modal({ isOpen, onClose, title, children }: { isOpen: boolean; onClose:
 }
 
 function ProductForm({ product, onSave, onCancel }: { product?: Product | null; onSave: (data: Partial<Product>) => void; onCancel: () => void }) {
-  const [formData, setFormData] = useState({
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imageUrl, setImageUrl] = useState('');
+  const [formData, setFormData] = useState<{
+    name: string;
+    slug: string;
+    description: string;
+    shortDescription: string;
+    price: number;
+    salePrice: number | null;
+    sku: string;
+    stockQuantity: number;
+    category: string;
+    collection: string;
+    tags: string;
+    status: ProductStatus;
+    images: string[];
+  }>({
     name: product?.name || '',
     slug: product?.slug || '',
     description: product?.description || '',
@@ -59,7 +75,7 @@ function ProductForm({ product, onSave, onCancel }: { product?: Product | null; 
     category: product?.category || '',
     collection: product?.collection || '',
     tags: product?.tags?.join(', ') || '',
-    status: product?.status || 'draft',
+    status: product?.status || ('draft' as ProductStatus),
     images: product?.images || [],
   });
 
@@ -77,7 +93,7 @@ function ProductForm({ product, onSave, onCancel }: { product?: Product | null; 
         category: '',
         collection: '',
         tags: '',
-        status: 'draft',
+        status: 'draft' as ProductStatus,
         images: [],
       });
     }
@@ -95,12 +111,49 @@ function ProductForm({ product, onSave, onCancel }: { product?: Product | null; 
     });
   };
 
+  const handleFiles = (files: FileList | null) => {
+    if (!files) return;
+    Array.from(files).forEach(file => {
+      if (!file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target?.result as string;
+        setFormData(prev => ({
+          ...prev,
+          images: [...prev.images, dataUrl],
+        }));
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleAddImageUrl = () => {
+    if (imageUrl.trim()) {
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, imageUrl.trim()],
+      }));
+      setImageUrl('');
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    handleFiles(e.dataTransfer.files);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const images = formData.images.length > 0 ? formData.images : [];
     onSave({
       ...formData,
-      tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
-      images: formData.images.length > 0 ? formData.images : ['/placeholder.jpg'],
+      tags: formData.tags.split(',').map((t: string) => t.trim()).filter(Boolean),
+      images,
+      thumbnail: images[0] || null,
     });
   };
 
@@ -262,20 +315,68 @@ function ProductForm({ product, onSave, onCancel }: { product?: Product | null; 
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
-        <div className="border-2 border-dashed border-gray-200 rounded-lg p-8 text-center hover:border-gray-300 transition-colors cursor-pointer">
+
+        {/* Hidden file input */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={(e) => handleFiles(e.target.files)}
+        />
+
+        {/* Upload drop zone */}
+        <div
+          onClick={() => fileInputRef.current?.click()}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors cursor-pointer"
+        >
           <Upload className="size-8 text-gray-400 mx-auto mb-2" />
-          <p className="text-sm text-gray-500">Click to upload or drag and drop</p>
-          <p className="text-xs text-gray-400 mt-1">PNG, JPG up to 10MB</p>
+          <p className="text-sm text-gray-600 font-medium">Click to upload or drag and drop</p>
+          <p className="text-xs text-gray-400 mt-1">PNG, JPG, WebP up to 5MB each</p>
         </div>
+
+        {/* Add image by URL */}
+        <div className="mt-3 flex gap-2">
+          <input
+            type="text"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            placeholder="Or paste an image URL..."
+            className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddImageUrl(); } }}
+          />
+          <button
+            type="button"
+            onClick={handleAddImageUrl}
+            disabled={!imageUrl.trim()}
+            className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+          >
+            Add URL
+          </button>
+        </div>
+
+        {/* Image previews */}
         {formData.images.length > 0 && (
-          <div className="mt-4 flex gap-2 flex-wrap">
-            {formData.images.map((img, i) => (
-              <div key={i} className="relative w-20 h-20 rounded-lg overflow-hidden border border-gray-200">
-                <ImageIcon className="size-full text-gray-300" />
+          <div className="mt-4 flex gap-3 flex-wrap">
+            {formData.images.map((img: string, i: number) => (
+              <div key={i} className="relative w-20 h-20 rounded-lg overflow-hidden border border-gray-200 group">
+                <img
+                  src={img}
+                  alt={`Product image ${i + 1}`}
+                  className="size-full object-cover"
+                />
+                {i === 0 && (
+                  <span className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[9px] text-center py-0.5 uppercase tracking-wider">
+                    Thumbnail
+                  </span>
+                )}
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, images: formData.images.filter((_, idx) => idx !== i) })}
-                  className="absolute top-1 right-1 p-1 bg-white rounded-full shadow"
+                  onClick={() => setFormData({ ...formData, images: formData.images.filter((_: string, idx: number) => idx !== i) })}
+                  className="absolute top-1 right-1 p-1 bg-white/90 rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <X className="size-3" />
                 </button>
@@ -618,7 +719,7 @@ export default function ProductsPage() {
                 <h3 className="text-xl font-semibold text-gray-900">{selectedProduct.name}</h3>
                 <p className="text-sm text-gray-500">{selectedProduct.description || 'No description'}</p>
                 <div className="flex flex-wrap gap-2">
-                  {selectedProduct.tags.map(tag => (
+                  {selectedProduct.tags.map((tag: string) => (
                     <span key={tag} className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
                       {tag}
                     </span>
