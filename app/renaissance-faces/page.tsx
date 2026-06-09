@@ -33,7 +33,7 @@ const FOUNDED_FACES: Array<{
     country: 'South Africa',
     instagram: '@taheera._.k',
     instagramUrl: 'https://www.instagram.com/taheera._.k/',
-    image: '/placeholder-user.jpg',
+    image: '/face-taheera.png',
   },
   {
     name: 'Riley Doherty',
@@ -42,7 +42,7 @@ const FOUNDED_FACES: Array<{
     country: '',
     instagram: '@_rileydoherty',
     instagramUrl: 'https://www.instagram.com/_rileydoherty/',
-    image: '/placeholder-user.jpg',
+    image: '/face-riley.png',
   },
   {
     name: 'Pretty Hunn Pride',
@@ -51,7 +51,7 @@ const FOUNDED_FACES: Array<{
     country: '',
     instagram: '@prettyhunnpride',
     instagramUrl: 'https://www.instagram.com/prettyhunnpride/',
-    image: '/placeholder-user.jpg',
+    image: '/face-prettyhunn.png',
   },
   {
     name: 'Wham!!',
@@ -60,7 +60,7 @@ const FOUNDED_FACES: Array<{
     country: '',
     instagram: '@yems_him',
     instagramUrl: 'https://www.instagram.com/yems_him/',
-    image: '/placeholder-user.jpg',
+    image: '/face-wham.png',
   },
   {
     name: 'Zee Santana',
@@ -69,7 +69,7 @@ const FOUNDED_FACES: Array<{
     country: '',
     instagram: '@mouthfullofzee.santana',
     instagramUrl: 'https://www.instagram.com/mouthfullofzee.santana/',
-    image: '/placeholder-user.jpg',
+    image: '/face-zee.png',
   },
 ];
 
