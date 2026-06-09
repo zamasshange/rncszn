@@ -12,6 +12,8 @@ const shots = [
   '/product-top.png',
 ]
 
+const INSTAGRAM_URL = 'https://www.instagram.com/renaissance.szn/'
+
 export function InstagramFeed() {
   return (
     <section className="pb-20 md:pb-28">
@@ -19,11 +21,13 @@ export function InstagramFeed() {
         <Reveal>
           <div className="flex items-center justify-between">
             <h2 className="font-serif text-2xl font-light text-foreground md:text-3xl">
-              @renaissance
+              @renaissance.szn
             </h2>
             <Link
-              href="#"
-              className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-foreground"
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-foreground hover:text-foreground/70 transition-colors"
             >
               <Camera className="size-4" />
               Follow
@@ -36,7 +40,9 @@ export function InstagramFeed() {
         {shots.map((src, i) => (
           <Link
             key={i}
-            href="#"
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="group relative aspect-square overflow-hidden"
           >
             <Image

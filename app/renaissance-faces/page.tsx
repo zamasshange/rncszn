@@ -8,7 +8,7 @@ import { AtSign, ExternalLink } from 'lucide-react';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/sections/footer';
 import { getAcceptedApplications } from '@/lib/applications-db';
-import type { Application } from '@/lib/database';
+import type { Application, ApplicationType } from '@/lib/database';
 
 const TYPE_LABELS: Record<string, string> = {
   model: 'Model', ambassador: 'Ambassador', creator: 'Creator',
@@ -16,17 +16,96 @@ const TYPE_LABELS: Record<string, string> = {
   stylist: 'Stylist', designer: 'Designer', collaborator: 'Collaborator',
 };
 
+// Founding faces of Renaissance — always displayed
+const FOUNDED_FACES: Array<{
+  name: string;
+  type: ApplicationType;
+  city: string;
+  country: string;
+  instagram: string;
+  instagramUrl: string;
+  image: string;
+}> = [
+  {
+    name: 'Taheera Koekemoer',
+    type: 'model',
+    city: '',
+    country: 'South Africa',
+    instagram: '@taheera._.k',
+    instagramUrl: 'https://www.instagram.com/taheera._.k/',
+    image: '/placeholder-user.jpg',
+  },
+  {
+    name: 'Riley Doherty',
+    type: 'model',
+    city: '',
+    country: '',
+    instagram: '@_rileydoherty',
+    instagramUrl: 'https://www.instagram.com/_rileydoherty/',
+    image: '/placeholder-user.jpg',
+  },
+  {
+    name: 'Pretty Hunn Pride',
+    type: 'creator',
+    city: '',
+    country: '',
+    instagram: '@prettyhunnpride',
+    instagramUrl: 'https://www.instagram.com/prettyhunnpride/',
+    image: '/placeholder-user.jpg',
+  },
+  {
+    name: 'Wham!!',
+    type: 'model',
+    city: '',
+    country: '',
+    instagram: '@yems_him',
+    instagramUrl: 'https://www.instagram.com/yems_him/',
+    image: '/placeholder-user.jpg',
+  },
+  {
+    name: 'Zee Santana',
+    type: 'model',
+    city: '',
+    country: '',
+    instagram: '@mouthfullofzee.santana',
+    instagramUrl: 'https://www.instagram.com/mouthfullofzee.santana/',
+    image: '/placeholder-user.jpg',
+  },
+];
+
 export default function RenaissanceFacesPage() {
-  const [talent, setTalent] = useState<Application[]>([]);
+  const [dbTalent, setDbTalent] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>('all');
 
   useEffect(() => {
-    getAcceptedApplications().then(data => { setTalent(data); setLoading(false); });
+    getAcceptedApplications().then(data => { setDbTalent(data); setLoading(false); });
   }, []);
 
-  const filtered = filter === 'all' ? talent : talent.filter(t => t.type === filter);
-  const types = Array.from(new Set(talent.map(t => t.type)));
+  // Merge founding faces with any accepted DB applications
+  const allTalent = [
+    ...FOUNDED_FACES.map((f, i) => ({
+      id: `founding-${i}`,
+      applicationNumber: `RNC-F${i + 1}`,
+      type: f.type,
+      status: 'accepted' as const,
+      fullName: f.name,
+      email: '',
+      phone: null, country: f.country || null, city: f.city || null,
+      dateOfBirth: null, gender: null,
+      instagram: f.instagram, tiktok: null, youtube: null,
+      portfolioWebsite: f.instagramUrl, extraFields: {},
+      whyJoin: null, whatMakesUnique: null, whatContribute: null, aboutYourself: null,
+      reviewedBy: null, internalNotes: '',
+      createdAt: '', updatedAt: '',
+      files: [{ id: `file-${i}`, applicationId: `founding-${i}`, fileType: 'headshot' as const, fileUrl: f.image, fileName: null, createdAt: '' }],
+      notes: [], statusHistory: [],
+    })),
+    ...dbTalent,
+  ];
+
+  const filtered = filter === 'all' ? allTalent : allTalent.filter(t => t.type === filter);
+  const types = Array.from(new Set(allTalent.map(t => t.type)));
 
   return (
     <main className="bg-background min-h-screen">
