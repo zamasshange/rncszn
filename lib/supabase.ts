@@ -10,8 +10,9 @@ export const supabase = supabaseUrl && supabaseAnonKey
 export const isSupabaseConfigured = () => !!supabase;
 export const isDemoMode = () => !supabase;
 
-// Storage bucket name
+// Storage bucket names
 export const PRODUCT_IMAGES_BUCKET = 'product-images';
+export const APPLICATION_FILES_BUCKET = 'application-files';
 
 /**
  * Upload a file to Supabase Storage (product-images bucket).
@@ -36,6 +37,28 @@ export async function uploadProductImage(file: File): Promise<string | null> {
   const { data } = supabase.storage
     .from(PRODUCT_IMAGES_BUCKET)
     .getPublicUrl(filePath);
+
+  return data.publicUrl;
+}
+
+export async function uploadApplicationFile(file: File, subfolder: string = 'general'): Promise<string | null> {
+  if (!supabase) return null;
+
+  const fileExt = file.name.split('.').pop() || 'bin';
+  const fileName = `${subfolder}/${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+
+  const { error } = await supabase.storage
+    .from(APPLICATION_FILES_BUCKET)
+    .upload(fileName, file, { upsert: true });
+
+  if (error) {
+    console.error('Application file upload error:', error);
+    return null;
+  }
+
+  const { data } = supabase.storage
+    .from(APPLICATION_FILES_BUCKET)
+    .getPublicUrl(fileName);
 
   return data.publicUrl;
 }

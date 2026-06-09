@@ -11,8 +11,8 @@ const links = [
   { label: 'Shop', href: '/shop' },
   { label: 'Collections', href: '/shop' },
   { label: 'Drops', href: '/shop' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Faces', href: '/renaissance-faces' },
+  { label: 'Join', href: '/join' },
 ]
 
 export function Navbar() {

@@ -181,3 +181,67 @@ export type DatabaseDiscount = Omit<Discount, 'id' | 'createdAt'> & {
   id: string;
   created_at: string;
 };
+
+// ============================================================
+// TALENT PLATFORM TYPES
+// ============================================================
+export type ApplicationType = 'model' | 'ambassador' | 'creator' | 'photographer' | 'videographer' | 'stylist' | 'designer' | 'collaborator';
+export type ApplicationStatus = 'pending' | 'under_review' | 'shortlisted' | 'interview' | 'accepted' | 'rejected';
+
+export type Application = {
+  id: string;
+  applicationNumber: string;
+  type: ApplicationType;
+  status: ApplicationStatus;
+  fullName: string;
+  email: string;
+  phone: string | null;
+  country: string | null;
+  city: string | null;
+  dateOfBirth: string | null;
+  gender: string | null;
+  instagram: string | null;
+  tiktok: string | null;
+  youtube: string | null;
+  portfolioWebsite: string | null;
+  extraFields: Record<string, unknown>;
+  whyJoin: string | null;
+  whatMakesUnique: string | null;
+  whatContribute: string | null;
+  aboutYourself: string | null;
+  reviewedBy: string | null;
+  internalNotes: string;
+  createdAt: string;
+  updatedAt: string;
+  // Joined data (populated on fetch)
+  files?: ApplicationFile[];
+  notes?: ApplicationNote[];
+  statusHistory?: StatusHistoryEntry[];
+};
+
+export type ApplicationFile = {
+  id: string;
+  applicationId: string;
+  fileType: 'image' | 'pdf' | 'video' | 'headshot' | 'fullbody' | 'additional';
+  fileUrl: string;
+  fileName: string | null;
+  createdAt: string;
+};
+
+export type ApplicationNote = {
+  id: string;
+  applicationId: string;
+  note: string;
+  author: string;
+  createdAt: string;
+};
+
+export type StatusHistoryEntry = {
+  id: string;
+  applicationId: string;
+  oldStatus: string | null;
+  newStatus: string;
+  note: string | null;
+  changedBy: string;
+  createdAt: string;
+};

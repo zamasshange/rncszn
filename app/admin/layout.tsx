@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, Package, ShoppingCart, Users, BarChart3, Settings, Layers, Tag, DollarSign, X } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, Users, BarChart3, Settings, Layers, Tag, DollarSign, UserCheck, X } from 'lucide-react';
 import TopNav from './top-nav';
 
 const navItems = [
@@ -10,6 +10,7 @@ const navItems = [
   { href: '/admin/products', label: 'Products', icon: Package },
   { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
   { href: '/admin/customers', label: 'Customers', icon: Users },
+  { href: '/admin/applications', label: 'Applications', icon: UserCheck },
   { href: '/admin/collections', label: 'Collections', icon: Layers },
   { href: '/admin/discounts', label: 'Discounts', icon: Tag },
   { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
