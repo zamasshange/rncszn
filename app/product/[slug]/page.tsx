@@ -78,7 +78,7 @@ export default function ProductPage() {
               initial={{ opacity: 0, scale: 1.02 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[#1a1a1c]"
+              className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-dashed border-foreground/20 bg-transparent"
             >
               <Image
                 src={gallery[active] || '/placeholder.svg'}
@@ -86,7 +86,7 @@ export default function ProductPage() {
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-contain p-6 md:p-10"
+                className="object-contain p-8 drop-shadow-[0_14px_36px_rgba(0,0,0,0.12)] md:p-12"
               />
             </motion.div>
           </div>

@@ -13,11 +13,11 @@ export function ProductCard({ product }: { product: Product }) {
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), {
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [4, -4]), {
     stiffness: 200,
     damping: 20,
   })
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), {
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-4, 4]), {
     stiffness: 200,
     damping: 20,
   })
@@ -46,14 +46,14 @@ export function ProductCard({ product }: { product: Product }) {
       >
         <motion.div
           style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-          className="relative aspect-[4/5] overflow-hidden rounded-xl bg-[#1a1a1c]"
+          className="relative aspect-[4/5] overflow-hidden rounded-xl border border-dashed border-foreground/20 bg-transparent transition-all duration-300 group-hover:border-solid group-hover:border-foreground/35"
         >
           <Image
             src={product.image || '/placeholder.svg'}
             alt={product.name}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
-            className="object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-[1.03] md:p-4"
+            className="object-contain p-5 drop-shadow-[0_10px_28px_rgba(0,0,0,0.1)] transition-transform duration-500 ease-out group-hover:scale-[1.02] md:p-7"
           />
 
           {product.badge && (
