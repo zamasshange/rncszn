@@ -30,8 +30,8 @@ export function Footer() {
               className="h-9 w-auto"
             />
             <p className="mt-5 max-w-xs text-pretty text-sm leading-relaxed text-muted-foreground">
-              A premium Y2K luxury fashion house. Chrome, holographic, and
-              editorial pieces built for the future of fashion.
+              Underground Y2K street brand. Thrift energy, limited drops, and
+              the faces of the movement.
             </p>
           </div>
 

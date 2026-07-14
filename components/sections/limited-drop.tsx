@@ -21,13 +21,14 @@ export function LimitedDrop() {
       <div className="relative h-[80svh] min-h-[520px] w-full overflow-hidden">
         <motion.div style={{ y, scale }} className="absolute inset-0">
           <Image
-            src="/drop-campaign.png"
-            alt="Limited edition Renaissance drop campaign"
+            src="/hero-editorial.png"
+            alt="RENAISSANCE x MOWA limited drop"
             fill
-            className="object-cover"
+            className="object-cover object-top"
+            priority={false}
           />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-t from-foreground/45 via-foreground/5 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/25 to-transparent" />
 
         <div className="absolute inset-0 mx-auto flex max-w-[1400px] flex-col justify-end px-5 pb-14 md:px-8 md:pb-20">
           <motion.div
@@ -38,14 +39,14 @@ export function LimitedDrop() {
             className="max-w-2xl text-background"
           >
             <p className="mb-4 text-[11px] uppercase tracking-[0.3em] text-background/80">
-              02 — Limited Edition
+              02 — Limited Drop
             </p>
             <h2 className="text-balance font-serif text-5xl font-light leading-[0.95] md:text-7xl">
-              The Mirror Drop
+              RENAISSANCE x MOWA
             </h2>
-            <p className="mt-5 max-w-md text-pretty text-sm leading-relaxed text-background/80">
-              Forty-eight pieces. Hand-finished chrome and holographic textiles.
-              Once they are gone, they are gone for good.
+            <p className="mt-5 max-w-md text-pretty text-sm leading-relaxed text-background/85">
+              August 5th. Limited drop. Street archive heat — once it&apos;s
+              gone, it&apos;s gone.
             </p>
             <Magnetic>
               <Link

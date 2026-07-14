@@ -118,9 +118,6 @@ export function Navbar() {
             className="relative text-foreground transition-colors hover:text-foreground/80"
           >
             <ShoppingBag className="size-6 md:size-5" />
-            <span className="absolute -right-2 -top-2 flex size-4 items-center justify-center rounded-full bg-foreground text-[10px] font-medium text-background">
-              2
-            </span>
           </Link>
         </div>
       </div>

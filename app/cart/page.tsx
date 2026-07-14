@@ -17,10 +17,7 @@ type CartItem = {
   qty: number
 }
 
-const demoCart: CartItem[] = [
-  { id: '1', name: 'Chrome Shell Puffer', slug: 'chrome-shell-puffer', price: 680, image: '/product-jacket.png', size: 'M', qty: 1 },
-  { id: '2', name: 'Holo Crop Tee', slug: 'holo-crop-tee', price: 180, image: '/product-top.png', size: 'S', qty: 1 },
-]
+const demoCart: CartItem[] = []
 
 export default function CartPage() {
   const [items, setItems] = useState<CartItem[]>(demoCart)

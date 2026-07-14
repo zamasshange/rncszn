@@ -16,10 +16,10 @@ export function BrandStory() {
         <Reveal>
           <div className="relative aspect-[5/4] overflow-hidden rounded-2xl">
             <Image
-              src="/brand-story.png"
-              alt="Renaissance chrome and iridescent textile detail"
+              src="/face-prettyhunn.png"
+              alt="Renaissance face — street archive"
               fill
-              className="object-cover"
+              className="object-cover object-top"
             />
           </div>
         </Reveal>
@@ -30,13 +30,12 @@ export function BrandStory() {
               03 — Brand Story
             </p>
             <h2 className="text-balance font-serif text-4xl font-light leading-[1.05] text-foreground md:text-5xl">
-              We are rebuilding the year 2000 in higher resolution
+              Underground Y2K. Built for the youth.
             </h2>
             <p className="mt-6 max-w-md text-pretty leading-relaxed text-muted-foreground">
-              Renaissance began as an archive of early-internet optimism — the
-              chrome, the gloss, the belief that the future would be beautiful.
-              We translate that energy into garments engineered with couture
-              precision and a relentless eye for detail.
+              Renaissance is street archive culture — thrift energy, loud
+              graphics, and the crew that wears it IRL. Not mall luxury. Not
+              chrome couture. Just the drop.
             </p>
             <Link
               href="/about"

@@ -5,11 +5,11 @@ import { Reveal } from '@/components/reveal'
 
 const shots = [
   '/hero-editorial.png',
-  '/editorial-2.png',
-  '/drop-campaign.png',
-  '/brand-story.png',
-  '/product-jacket.png',
-  '/product-top.png',
+  '/face-taheera.png',
+  '/face-prettyhunn.png',
+  '/products/make-sa-great-again-tee.png',
+  '/products/girls-first-tee.png',
+  '/products/renaissance-stars-flame-hoodie.png',
 ]
 
 const INSTAGRAM_URL = 'https://www.instagram.com/renaissance.szn/'
@@ -43,14 +43,14 @@ export function InstagramFeed() {
             href={INSTAGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative aspect-square overflow-hidden"
+            className="group relative aspect-square overflow-hidden bg-secondary"
           >
             <Image
               src={src || '/placeholder.svg'}
               alt={`Renaissance Instagram post ${i + 1}`}
               fill
               sizes="(max-width: 768px) 33vw, 16vw"
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
+              className="object-contain p-2 transition-transform duration-700 group-hover:scale-105 md:object-cover md:p-0"
             />
             <span className="absolute inset-0 flex items-center justify-center bg-foreground/0 text-background opacity-0 transition-all duration-300 group-hover:bg-foreground/30 group-hover:opacity-100">
               <Camera className="size-6" />
