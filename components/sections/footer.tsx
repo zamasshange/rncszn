@@ -1,72 +1,57 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-const groups = [
-  {
-    title: 'Shop',
-    links: ['New Arrivals', 'Outerwear', 'Tops', 'Accessories', 'Sale'],
-  },
-  {
-    title: 'House',
-    links: ['About', 'Sustainability', 'Careers', 'Stockists', 'Press'],
-  },
-  {
-    title: 'Support',
-    links: ['Contact', 'Shipping', 'Returns', 'Size Guide', 'FAQ'],
-  },
+const links = [
+  { label: 'Shop', href: '/shop' },
+  { label: 'About', href: '/about' },
+  { label: 'Faces', href: '/renaissance-faces' },
+  { label: 'Join', href: '/join' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'Instagram', href: 'https://www.instagram.com/renaissance.szn/' },
 ]
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-secondary/50 text-foreground">
-      <div className="mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-20">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
-          <div>
-            <Image
-              src="/renaissance-logo-dark.png"
-              alt="RENAISSANCE"
-              width={200}
-              height={78}
-              className="h-9 w-auto"
-            />
-            <p className="mt-5 max-w-xs text-pretty text-sm leading-relaxed text-muted-foreground">
-              Underground Y2K street brand. Thrift energy, limited drops, and
-              the faces of the movement.
-            </p>
-          </div>
-
-          {groups.map((group) => (
-            <div key={group.title}>
-              <h3 className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-                {group.title}
-              </h3>
-              <ul className="mt-4 space-y-3">
-                {group.links.map((link) => (
-                  <li key={link}>
-                    <Link
-                      href="/shop"
-                      className="text-sm text-foreground/80 transition-colors hover:text-foreground"
-                    >
-                      {link}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+    <footer className="border-t border-border bg-secondary/40 text-foreground">
+      <div className="mx-auto flex max-w-[1400px] flex-col gap-6 px-5 py-8 md:flex-row md:items-center md:justify-between md:px-8 md:py-10">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+          <Image
+            src="/renaissance-logo-dark.png"
+            alt="RENAISSANCE"
+            width={160}
+            height={62}
+            className="h-7 w-auto"
+          />
+          <p className="max-w-xs text-xs leading-relaxed text-muted-foreground">
+            Underground Y2K street brand. Limited drops.
+          </p>
         </div>
 
-        <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-border pt-8 text-xs text-muted-foreground md:flex-row md:items-center">
-          <p>© {new Date().getFullYear()} Renaissance. All rights reserved. Developed by BDL Corp.</p>
-          <div className="flex gap-6">
+        <nav className="flex flex-wrap gap-x-5 gap-y-2">
+          {links.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              {...(link.href.startsWith('http')
+                ? { target: '_blank', rel: 'noopener noreferrer' }
+                : {})}
+              className="text-xs uppercase tracking-[0.14em] text-foreground/70 transition-colors hover:text-foreground"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+
+      <div className="border-t border-border">
+        <div className="mx-auto flex max-w-[1400px] flex-col gap-2 px-5 py-4 text-[11px] text-muted-foreground md:flex-row md:items-center md:justify-between md:px-8">
+          <p>© {new Date().getFullYear()} Renaissance. Developed by BDL Corp.</p>
+          <div className="flex gap-5">
             <Link href="#" className="transition-colors hover:text-foreground">
               Privacy
             </Link>
             <Link href="#" className="transition-colors hover:text-foreground">
               Terms
-            </Link>
-            <Link href="#" className="transition-colors hover:text-foreground">
-              Instagram
             </Link>
           </div>
         </div>

@@ -4,7 +4,6 @@ import { Marquee } from '@/components/sections/marquee'
 import { FeaturedGrid } from '@/components/sections/featured-grid'
 import { LimitedDrop } from '@/components/sections/limited-drop'
 import { BrandStory } from '@/components/sections/brand-story'
-import { Reviews } from '@/components/sections/reviews'
 import { Newsletter } from '@/components/sections/newsletter'
 import { InstagramFeed } from '@/components/sections/instagram-feed'
 import { Footer } from '@/components/sections/footer'
@@ -18,7 +17,6 @@ export default function Page() {
       <FeaturedGrid />
       <LimitedDrop />
       <BrandStory />
-      <Reviews />
       <Newsletter />
       <InstagramFeed />
       <Footer />
