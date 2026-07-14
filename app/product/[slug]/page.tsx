@@ -9,29 +9,42 @@ import { Heart, Minus, Plus, Truck, RotateCcw, ShieldCheck } from 'lucide-react'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/sections/footer'
 import { ProductCard } from '@/components/product-card'
-import { getSiteProductBySlug, getSiteProducts, type Product } from '@/lib/products'
+import { getSiteProductBySlug, getSiteProducts, getStaticProductBySlug, products as staticProducts, type Product } from '@/lib/products'
 import { Magnetic } from '@/components/magnetic'
 
 export default function ProductPage() {
   const params = useParams()
   const slug = params?.slug as string
 
-  const [product, setProduct] = useState<Product | null>(null)
-  const [related, setRelated] = useState<Product[]>([])
+  const [product, setProduct] = useState<Product | null>(
+    () => getStaticProductBySlug(slug) ?? null,
+  )
+  const [related, setRelated] = useState<Product[]>(() =>
+    staticProducts.filter((p) => p.slug !== slug).slice(0, 4),
+  )
   const [active] = useState(0)
-  const [size, setSize] = useState('M')
+  const [size, setSize] = useState(
+    () => getStaticProductBySlug(slug)?.sizes[1] ?? getStaticProductBySlug(slug)?.sizes[0] ?? 'M',
+  )
   const [qty, setQty] = useState(1)
   const [wishlisted, setWishlisted] = useState(false)
 
   useEffect(() => {
+    const local = getStaticProductBySlug(slug) ?? null
+    setProduct(local)
+    if (local) setSize(local.sizes[1] ?? local.sizes[0])
+    setRelated(staticProducts.filter((p) => p.slug !== slug).slice(0, 4))
+
     async function load() {
       const found = await getSiteProductBySlug(slug)
       if (found) {
         setProduct(found)
         setSize(found.sizes[1] ?? found.sizes[0])
+      } else {
+        setProduct(null)
       }
       const all = await getSiteProducts()
-      setRelated(all.filter((p) => p.id !== found?.id).slice(0, 4))
+      setRelated(all.filter((p) => p.id !== found?.id && p.slug !== slug).slice(0, 4))
     }
     load()
   }, [slug])

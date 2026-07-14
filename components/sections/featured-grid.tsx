@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
-import { getSiteProducts, type Product } from '@/lib/products'
+import { getSiteProducts, products as staticProducts, type Product } from '@/lib/products'
 import { ProductCard } from '@/components/product-card'
 import { Reveal } from '@/components/reveal'
 
 export function FeaturedGrid() {
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<Product[]>(staticProducts)
 
   useEffect(() => {
     getSiteProducts().then(setProducts)

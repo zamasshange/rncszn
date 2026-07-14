@@ -47,14 +47,36 @@ function mapToSiteProduct(p: DbProduct): Product {
   }
 }
 
+const DB_TIMEOUT_MS = 1500
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('timeout')), ms)
+    promise.then(
+      (value) => {
+        clearTimeout(timer)
+        resolve(value)
+      },
+      (err) => {
+        clearTimeout(timer)
+        reject(err)
+      },
+    )
+  })
+}
+
+/** Sync lookup — use for instant first paint. */
+export function getStaticProductBySlug(slug: string): Product | undefined {
+  return products.find((p) => p.slug === slug)
+}
+
 /**
  * Get all published products for the storefront.
- * Returns a Promise since it may fetch from Supabase.
- * Falls back to the static catalog if the DB is empty / unreachable.
+ * Falls back to the static catalog if the DB is empty, slow, or unreachable.
  */
 export async function getSiteProducts(): Promise<Product[]> {
   try {
-    const dbProducts = await getPublishedProducts()
+    const dbProducts = await withTimeout(getPublishedProducts(), DB_TIMEOUT_MS)
     if (dbProducts.length > 0) {
       return dbProducts.map(mapToSiteProduct)
     }
@@ -69,14 +91,14 @@ export async function getSiteProducts(): Promise<Product[]> {
  */
 export async function getSiteProductBySlug(slug: string): Promise<Product | undefined> {
   try {
-    const dbProduct = await dbGetProductBySlug(slug)
+    const dbProduct = await withTimeout(dbGetProductBySlug(slug), DB_TIMEOUT_MS)
     if (dbProduct && dbProduct.status === 'published') {
       return mapToSiteProduct(dbProduct)
     }
   } catch {
     // ignore and fall through
   }
-  return products.find((p) => p.slug === slug)
+  return getStaticProductBySlug(slug)
 }
 
 // Static fallback for SSR / build time (server component usage)

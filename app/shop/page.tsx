@@ -7,7 +7,7 @@ import { SlidersHorizontal } from 'lucide-react'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/sections/footer'
 import { ProductCard } from '@/components/product-card'
-import { getSiteProducts, type Product } from '@/lib/products'
+import { getSiteProducts, products as staticProducts, type Product } from '@/lib/products'
 
 const categories = ['All', 'Outerwear', 'Tops', 'Bottoms', 'Accessories', 'Dresses']
 const sorts = [
@@ -17,7 +17,7 @@ const sorts = [
 ] as const
 
 export default function ShopPage() {
-  const [allProducts, setAllProducts] = useState<Product[]>([])
+  const [allProducts, setAllProducts] = useState<Product[]>(staticProducts)
   const [category, setCategory] = useState('All')
   const [sort, setSort] = useState<(typeof sorts)[number]['key']>('new')
 
