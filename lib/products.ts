@@ -50,14 +50,18 @@ function mapToSiteProduct(p: DbProduct): Product {
 /**
  * Get all published products for the storefront.
  * Returns a Promise since it may fetch from Supabase.
+ * Falls back to the static catalog if the DB is empty / unreachable.
  */
 export async function getSiteProducts(): Promise<Product[]> {
   try {
     const dbProducts = await getPublishedProducts()
-    return dbProducts.map(mapToSiteProduct)
+    if (dbProducts.length > 0) {
+      return dbProducts.map(mapToSiteProduct)
+    }
   } catch {
-    return []
+    // ignore and fall through
   }
+  return products
 }
 
 /**
@@ -66,11 +70,13 @@ export async function getSiteProducts(): Promise<Product[]> {
 export async function getSiteProductBySlug(slug: string): Promise<Product | undefined> {
   try {
     const dbProduct = await dbGetProductBySlug(slug)
-    if (!dbProduct || dbProduct.status !== 'published') return undefined
-    return mapToSiteProduct(dbProduct)
+    if (dbProduct && dbProduct.status === 'published') {
+      return mapToSiteProduct(dbProduct)
+    }
   } catch {
-    return undefined
+    // ignore and fall through
   }
+  return products.find((p) => p.slug === slug)
 }
 
 // Static fallback for SSR / build time (server component usage)
