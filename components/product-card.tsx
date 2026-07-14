@@ -46,14 +46,14 @@ export function ProductCard({ product }: { product: Product }) {
       >
         <motion.div
           style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
-          className="relative aspect-[4/5] overflow-hidden rounded-xl bg-muted"
+          className="relative aspect-[4/5] overflow-hidden rounded-xl bg-[#1a1a1c]"
         >
           <Image
             src={product.image || '/placeholder.svg'}
             alt={product.name}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            className="object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-[1.03] md:p-4"
           />
 
           {product.badge && (

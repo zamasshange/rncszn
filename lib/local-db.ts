@@ -13,7 +13,7 @@ export type { Product, Collection, Order, Customer, Discount, SiteSettings, Prod
 // localStorage helpers (fallback)
 // ============================================================
 const STORAGE_KEYS = {
-  products: 'renaissance_products_v2',
+  products: 'renaissance_products_v3',
   collections: 'renaissance_collections_v2',
   orders: 'renaissance_orders',
   customers: 'renaissance_customers',

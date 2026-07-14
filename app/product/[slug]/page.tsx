@@ -18,7 +18,7 @@ export default function ProductPage() {
 
   const [product, setProduct] = useState<Product | null>(null)
   const [related, setRelated] = useState<Product[]>([])
-  const [active, setActive] = useState(0)
+  const [active] = useState(0)
   const [size, setSize] = useState('M')
   const [qty, setQty] = useState(1)
   const [wishlisted, setWishlisted] = useState(false)
@@ -51,7 +51,7 @@ export default function ProductPage() {
     )
   }
 
-  const gallery = [product.image, '/editorial-2.png', '/brand-story.png']
+  const gallery = [product.image]
 
   return (
     <main className="bg-background">
@@ -72,39 +72,21 @@ export default function ProductPage() {
 
         <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Gallery */}
-          <div className="flex flex-col-reverse gap-4 md:flex-row">
-            <div className="flex gap-3 md:flex-col">
-              {gallery.map((src, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActive(i)}
-                  className={`relative aspect-square w-16 overflow-hidden rounded-lg border transition-colors md:w-20 ${
-                    active === i ? 'border-foreground' : 'border-border'
-                  }`}
-                  aria-label={`View image ${i + 1}`}
-                >
-                  <Image
-                    src={src || '/placeholder.svg'}
-                    alt=""
-                    fill
-                    className="object-cover"
-                  />
-                </button>
-              ))}
-            </div>
+          <div className="flex flex-col gap-4">
             <motion.div
               key={active}
               initial={{ opacity: 0, scale: 1.02 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="relative aspect-[4/5] flex-1 overflow-hidden rounded-2xl bg-muted"
+              className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[#1a1a1c]"
             >
               <Image
                 src={gallery[active] || '/placeholder.svg'}
                 alt={product.name}
                 fill
                 priority
-                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-contain p-6 md:p-10"
               />
             </motion.div>
           </div>
@@ -136,9 +118,8 @@ export default function ProductPage() {
             </div>
 
             <p className="mt-6 max-w-md text-pretty leading-relaxed text-muted-foreground">
-              A signature Renaissance piece — hand-finished in chrome-treated
-              technical fabric with a sculpted silhouette. Designed in-house and
-              produced in limited quantities.
+              From the Renaissance archive — street drop, not mall stock. Boxy
+              fit, loud print, made for the crew that gets it.
             </p>
 
             {/* Size */}
