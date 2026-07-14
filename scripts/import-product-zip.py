@@ -5,6 +5,8 @@ import json
 import re
 from pathlib import Path
 
+from collections import deque
+
 import numpy as np
 from PIL import Image, ImageFilter, ImageOps
 
@@ -12,8 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "product_pictures_extracted"
 OUT = ROOT / "public" / "products"
 OUT.mkdir(parents=True, exist_ok=True)
-SIZE = 1600
-PAD_RATIO = 0.08
+SIZE = 1200
+PAD_RATIO = 0.06
 
 # WhatsApp filename -> catalog slug
 MAPPING: list[tuple[str, str]] = [
@@ -55,34 +57,45 @@ def sort_key(name: str) -> tuple:
     return (n, sub)
 
 
-def remove_white_bg(img: Image.Image, threshold: int = 248) -> Image.Image:
-    """Fast white/near-white background removal."""
+def remove_white_bg(img: Image.Image) -> Image.Image:
+    """Remove outer white studio bg only — strict threshold avoids eating white garments."""
     rgba = img.convert("RGBA")
-    arr = np.array(rgba, dtype=np.float32)
-    rgb = arr[..., :3]
-    # distance from white
-    dist = np.sqrt(((255.0 - rgb) ** 2).sum(axis=-1))
-    alpha = np.clip((dist - 8) / 35.0 * 255.0, 0, 255).astype(np.uint8)
-    # Also kill very light pixels directly
-    light = (rgb.min(axis=-1) > threshold)
-    alpha[light] = 0
+    arr = np.array(rgba)
+    rgb = arr[..., :3].astype(np.float32)
+    h, w = rgb.shape[:2]
+
+    # Only treat near-pure-white as background (not off-white fabric)
+    is_bg_color = (rgb[..., 0] > 250) & (rgb[..., 1] > 250) & (rgb[..., 2] > 250)
+
+    bg = np.zeros((h, w), dtype=bool)
+    q: deque[tuple[int, int]] = deque()
+
+    def try_seed(x: int, y: int) -> None:
+        if is_bg_color[y, x] and not bg[y, x]:
+            bg[y, x] = True
+            q.append((x, y))
+
+    for x in range(w):
+        try_seed(x, 0)
+        try_seed(x, h - 1)
+    for y in range(h):
+        try_seed(0, y)
+        try_seed(w - 1, y)
+
+    while q:
+        x, y = q.popleft()
+        for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+            if 0 <= nx < w and 0 <= ny < h and not bg[ny, nx] and is_bg_color[ny, nx]:
+                bg[ny, nx] = True
+                q.append((nx, ny))
+
+    alpha = np.where(bg, 0, 255).astype(np.uint8)
     arr[..., 3] = alpha
-    out = Image.fromarray(arr.astype(np.uint8), "RGBA")
-    # soften edges
-    a = out.getchannel("A").filter(ImageFilter.GaussianBlur(0.8))
-    out.putalpha(a)
-    return out
+    return Image.fromarray(arr, "RGBA")
 
 
 def process(img: Image.Image) -> Image.Image:
-    # upscale small whatsapp images for sharper display
-    if max(img.size) < 900:
-        scale = 900 / max(img.size)
-        img = img.resize(
-            (int(img.width * scale), int(img.height * scale)),
-            Image.Resampling.LANCZOS,
-        )
-
+    # Don't upscale — keeps WhatsApp JPEGs sharp, avoids blur artifacts
     cut = remove_white_bg(img)
     bbox = cut.getbbox()
     if bbox:
