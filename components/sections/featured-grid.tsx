@@ -22,7 +22,7 @@ export function FeaturedGrid() {
             01 — New Arrivals
           </p>
           <h2 className="max-w-xl text-balance font-serif text-4xl font-light leading-[1.05] text-foreground md:text-6xl">
-            The latest from the Cyber Atelier
+            Fresh from the archive
           </h2>
         </Reveal>
         <Reveal delay={0.1}>

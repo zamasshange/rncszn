@@ -56,8 +56,8 @@ export default function ShopPage() {
           The Collection
         </h1>
         <p className="mt-4 max-w-md text-pretty text-sm leading-relaxed text-muted-foreground">
-          {filtered.length} pieces engineered with couture precision and chrome
-          obsession.
+          {filtered.length} pieces from the archive — tees, heavyweights, girls
+          drop, and bottoms. Thrift-energy street, not mall luxury.
         </p>
       </section>
 
