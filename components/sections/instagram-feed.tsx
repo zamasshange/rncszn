@@ -4,11 +4,11 @@ import { Camera } from 'lucide-react'
 import { Reveal } from '@/components/reveal'
 
 const shots = [
+  '/products/rnc-soldier-chain.png',
   '/hero-editorial.png',
   '/face-taheera.png',
   '/face-prettyhunn.png',
   '/products/make-sa-great-again-tee.png',
-  '/products/girls-first-tee.png',
   '/products/renaissance-stars-flame-hoodie.png',
 ]
 

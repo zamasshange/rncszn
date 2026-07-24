@@ -13,7 +13,7 @@ export type { Product, Collection, Order, Customer, Discount, SiteSettings, Prod
 // localStorage helpers (fallback)
 // ============================================================
 const STORAGE_KEYS = {
-  products: 'renaissance_products_v3',
+  products: 'renaissance_products_v4',
   collections: 'renaissance_collections_v2',
   orders: 'renaissance_orders',
   customers: 'renaissance_customers',
@@ -36,6 +36,7 @@ function setStorage<T>(key: string, data: T): void {
 // Initial demo data (only used for localStorage fallback)
 // ============================================================
 const initialProducts: Product[] = [
+  { id: 'prod_0', name: "RNC Soldier Chain", slug: "rnc-soldier-chain", description: "RNC Soldier Chain — silver ball chain with soldier pendant and R tag. Limited accessory drop.", shortDescription: "RNC Soldier Chain", price: 700, salePrice: null, sku: "RNZ-000", stockQuantity: 25, category: "Accessories", collection: "Accessories", tags: ["new", "limited"], status: 'published', images: ["/products/rnc-soldier-chain.png"], thumbnail: "/products/rnc-soldier-chain.png", createdAt: '2026-07-24T17:00:00Z', updatedAt: '2026-07-24T17:00:00Z' },
   { id: 'prod_1', name: "Make SA Great Again Tee", slug: "make-sa-great-again-tee", description: "Official Renaissance drop \u2014 Make SA Great Again Tee. Street / Y2K / thrift energy.", shortDescription: "Make SA Great Again Tee", price: 450, salePrice: null, sku: "RNZ-001", stockQuantity: 25, category: "Tops", collection: "Renaissance Tees", tags: ["new"], status: 'published', images: ["/products/make-sa-great-again-tee.png"], thumbnail: "/products/make-sa-great-again-tee.png", createdAt: '2026-07-14T10:00:00Z', updatedAt: '2026-07-14T10:00:00Z' },
   { id: 'prod_2', name: "Girls First Tee", slug: "girls-first-tee", description: "Official Renaissance drop \u2014 Girls First Tee. Street / Y2K / thrift energy.", shortDescription: "Girls First Tee", price: 450, salePrice: null, sku: "RNZ-002", stockQuantity: 25, category: "Tops", collection: "Renaissance Tees", tags: ["new"], status: 'published', images: ["/products/girls-first-tee.png"], thumbnail: "/products/girls-first-tee.png", createdAt: '2026-07-14T10:00:00Z', updatedAt: '2026-07-14T10:00:00Z' },
   { id: 'prod_3', name: "Renaissance Landscape Tee", slug: "renaissance-landscape-tee", description: "Official Renaissance drop \u2014 Renaissance Landscape Tee. Street / Y2K / thrift energy.", shortDescription: "Renaissance Landscape Tee", price: 450, salePrice: null, sku: "RNZ-003", stockQuantity: 25, category: "Tops", collection: "Renaissance Tees", tags: ["new"], status: 'published', images: ["/products/renaissance-landscape-tee.png"], thumbnail: "/products/renaissance-landscape-tee.png", createdAt: '2026-07-14T10:00:00Z', updatedAt: '2026-07-14T10:00:00Z' },

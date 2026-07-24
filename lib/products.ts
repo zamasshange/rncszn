@@ -105,6 +105,19 @@ export async function getSiteProductBySlug(slug: string): Promise<Product | unde
 // Client components should call getSiteProducts() instead
 export const products: Product[] = [
   {
+    id: 'p0',
+    name: "RNC Soldier Chain",
+    slug: "rnc-soldier-chain",
+    price: 700,
+    image: "/products/rnc-soldier-chain.png",
+    category: "Accessories",
+    collection: "Accessories",
+    colors: ['Silver'],
+    sizes: ['OS'],
+    badge: 'New',
+    inStock: true,
+  },
+  {
     id: 'p1',
     name: "Make SA Great Again Tee",
     slug: "make-sa-great-again-tee",

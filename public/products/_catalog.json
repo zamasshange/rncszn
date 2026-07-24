@@ -1,5 +1,13 @@
 [
   {
+    "slug": "rnc-soldier-chain",
+    "name": "RNC Soldier Chain",
+    "category": "Accessories",
+    "collection": "Accessories",
+    "price": 700,
+    "image": "/products/rnc-soldier-chain.png"
+  },
+  {
     "slug": "make-sa-great-again-tee",
     "name": "Make SA Great Again Tee",
     "category": "Tops",
